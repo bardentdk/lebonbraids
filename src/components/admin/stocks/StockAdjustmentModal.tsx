@@ -97,22 +97,22 @@ import { adjustStock } from '@/lib/actions/stocks'; interface Props {
             router.refresh();
         });
     }; if (!product) return null; return (
-        <Modal
-            open={open}
-            onClose={onClose}
-            title={Ajuster le stock — ${product.name}}
-size = "md"
-footer = {
-<>
-<Button variant="outline" onClick={onClose} disabled={isPending}>
-Annuler
-</Button>
-<Button onClick={handleSubmit(onSubmit)} loading={isPending}>
-Confirmer
-</Button>
-</>
-}
->
+    <Modal
+        open={open}
+        onClose={onClose}
+        title={`Ajuster le stock — ${product.name}`}
+        size="md"
+        footer={
+            <>
+            <Button variant="outline" onClick={onClose} disabled={isPending}>
+                Annuler
+            </Button>
+            <Button onClick={handleSubmit(onSubmit)} loading={isPending}>
+                Confirmer
+            </Button>
+            </>
+        }
+        >
     <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
         {/* Type d'opération */}
         <div>
@@ -143,54 +143,54 @@ Confirmer
             </div>
         </div>
         <Input
-      type="number"
-      label={
-        type === 'adjustment'
-          ? 'Nouveau stock total'
-          : 'Quantité'
-      }
-      hint={
-        type === 'adjustment'
-          ? "La quantité fournie remplacera le stock actuel"
-          : undefined
-      }
-      {...register('quantity')}
-      error={errors.quantity?.message}
-    />
-    {/* Preview */}
-    <div className="flex items-center gap-3 rounded-xl border border-border bg-muted/40 p-4">
-      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-background text-primary-600">
-        <Package className="h-4 w-4" />
-      </div>
-      <div className="flex-1">
-        <div className="text-xs uppercase tracking-wider text-muted-foreground">
-          Stock après opération
+            type="number"
+            label={
+                type === 'adjustment'
+                    ? 'Nouveau stock total'
+                    : 'Quantité'
+            }
+            hint={
+                type === 'adjustment'
+                    ? "La quantité fournie remplacera le stock actuel"
+                    : undefined
+            }
+            {...register('quantity')}
+            error={errors.quantity?.message}
+        />
+        {/* Preview */}
+        <div className="flex items-center gap-3 rounded-xl border border-border bg-muted/40 p-4">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-background text-primary-600">
+                <Package className="h-4 w-4" />
+            </div>
+            <div className="flex-1">
+                <div className="text-xs uppercase tracking-wider text-muted-foreground">
+                    Stock après opération
+                </div>
+                <div className="mt-1 flex items-center gap-2 text-base font-semibold tabular-nums">
+                    <span className="text-muted-foreground">{product.stock_quantity}</span>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                    <span
+                        className={cn(
+                            preview < 0
+                                ? 'text-danger'
+                                : preview === 0
+                                    ? 'text-warning'
+                                    : 'text-success'
+                        )}
+                    >
+                        {preview}
+                    </span>
+                </div>
+            </div>
         </div>
-        <div className="mt-1 flex items-center gap-2 text-base font-semibold tabular-nums">
-          <span className="text-muted-foreground">{product.stock_quantity}</span>
-          <ArrowRight className="h-4 w-4 text-muted-foreground" />
-          <span
-            className={cn(
-              preview < 0
-                ? 'text-danger'
-                : preview === 0
-                ? 'text-warning'
-                : 'text-success'
-            )}
-          >
-            {preview}
-          </span>
-        </div>
-      </div>
-    </div>
-    <Textarea
-      label="Raison"
-      rows={2}
-      placeholder="Ex: Réception fournisseur, vente boutique..."
-      {...register('reason')}
-      error={errors.reason?.message}
-    />
-  </form>
-</Modal>
+        <Textarea
+            label="Raison"
+            rows={2}
+            placeholder="Ex: Réception fournisseur, vente boutique..."
+            {...register('reason')}
+            error={errors.reason?.message}
+        />
+    </form>
+</Modal >
     );
 }

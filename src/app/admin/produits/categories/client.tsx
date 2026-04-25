@@ -9,7 +9,7 @@ import { ProductCategoriesManager } from '@/components/admin/products/ProductCat
 import { ProductCategoryForm } from '@/components/admin/products/ProductCategoryForm';
 
 interface Props {
-  initialCategories: Awaited
+  initialCategories: Awaited<
     ReturnType<typeof import('@/lib/actions/product-categories').listProductCategories>
   >;
 }
