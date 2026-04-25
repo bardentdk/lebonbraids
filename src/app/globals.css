@@ -1,26 +1,327 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
+/* ==========================================
+   🎨 THÈME DYNAMIQUE — Variables HSL
+   ========================================== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Couleur primaire — Bleu Premium */
+  --color-primary-50: 214 100% 97%;
+  --color-primary-100: 214 95% 93%;
+  --color-primary-200: 213 97% 87%;
+  --color-primary-300: 212 96% 78%;
+  --color-primary-400: 213 94% 68%;
+  --color-primary-500: 217 91% 60%;
+  --color-primary-600: 221 83% 53%;
+  --color-primary-700: 224 76% 48%;
+  --color-primary-800: 226 71% 40%;
+  --color-primary-900: 224 64% 33%;
+  --color-primary-950: 226 57% 21%;
+
+  /* Couleur secondaire — Or doux */
+  --color-secondary-50: 48 100% 96%;
+  --color-secondary-500: 43 96% 56%;
+  --color-secondary-600: 38 92% 50%;
+  --color-secondary-900: 28 73% 26%;
+
+  /* Accent & neutres */
+  --color-accent: 262 83% 58%;
+  --color-accent-foreground: 0 0% 100%;
+  --color-background: 0 0% 100%;
+  --color-foreground: 224 71% 4%;
+  --color-muted: 220 14% 96%;
+  --color-muted-foreground: 220 9% 46%;
+  --color-border: 220 13% 91%;
+  --color-ring: 221 83% 53%;
+
+  --color-success: 142 76% 36%;
+  --color-warning: 38 92% 50%;
+  --color-danger: 0 84% 60%;
+
+  --radius: 1rem;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-poppins), system-ui, sans-serif;
+  --font-display: var(--font-poppins), system-ui, sans-serif;
+
+  --color-primary-50: hsl(var(--color-primary-50));
+  --color-primary-100: hsl(var(--color-primary-100));
+  --color-primary-200: hsl(var(--color-primary-200));
+  --color-primary-300: hsl(var(--color-primary-300));
+  --color-primary-400: hsl(var(--color-primary-400));
+  --color-primary-500: hsl(var(--color-primary-500));
+  --color-primary-600: hsl(var(--color-primary-600));
+  --color-primary-700: hsl(var(--color-primary-700));
+  --color-primary-800: hsl(var(--color-primary-800));
+  --color-primary-900: hsl(var(--color-primary-900));
+  --color-primary-950: hsl(var(--color-primary-950));
+
+  --color-secondary-50: hsl(var(--color-secondary-50));
+  --color-secondary-500: hsl(var(--color-secondary-500));
+  --color-secondary-600: hsl(var(--color-secondary-600));
+  --color-secondary-900: hsl(var(--color-secondary-900));
+
+  --color-accent: hsl(var(--color-accent));
+  --color-accent-foreground: hsl(var(--color-accent-foreground));
+  --color-background: hsl(var(--color-background));
+  --color-foreground: hsl(var(--color-foreground));
+  --color-muted: hsl(var(--color-muted));
+  --color-muted-foreground: hsl(var(--color-muted-foreground));
+  --color-border: hsl(var(--color-border));
+  --color-ring: hsl(var(--color-ring));
+  --color-success: hsl(var(--color-success));
+  --color-warning: hsl(var(--color-warning));
+  --color-danger: hsl(var(--color-danger));
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
+  --shadow-soft: 0 2px 12px -2px hsl(var(--color-primary-900) / 0.08);
+  --shadow-glow: 0 0 40px -8px hsl(var(--color-primary-500) / 0.4);
+  --shadow-premium:
+    0 20px 60px -15px hsl(var(--color-primary-900) / 0.2),
+    0 8px 20px -10px hsl(var(--color-primary-700) / 0.15);
+
+  --animate-fade-in: fadeIn 0.6s ease-out;
+  --animate-slide-up: slideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-shimmer: shimmer 2s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-shake: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  20% { transform: translate(-15%, 5%); }
+  30% { transform: translate(7%, -25%); }
+  40% { transform: translate(-5%, 25%); }
+  50% { transform: translate(-15%, 10%); }
+  60% { transform: translate(15%, 0%); }
+  70% { transform: translate(0%, 15%); }
+  80% { transform: translate(3%, 35%); }
+  90% { transform: translate(-10%, 10%); }
+}
+
+/* ==========================================
+   🎨 BASE STYLES
+   ========================================== */
+@layer base {
+  * {
+    border-color: hsl(var(--color-border));
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: hsl(var(--color-background));
+    color: hsl(var(--color-foreground));
+    font-family: var(--font-poppins), system-ui, sans-serif;
+  }
+
+  ::selection {
+    background-color: hsl(var(--color-primary-600));
+    color: #fff;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--color-muted));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--color-primary-300));
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--color-primary-500));
+  }
+
+  /* Focus visible premium */
+  :focus-visible {
+    outline: 2px solid hsl(var(--color-primary-500));
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ==========================================
+   🎨 UTILITIES CUSTOM
+   ========================================== */
+@layer components {
+  .glass {
+    background: hsl(var(--color-background) / 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid hsl(var(--color-border) / 0.5);
+  }
+
+  .text-gradient {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--color-primary-600)),
+      hsl(var(--color-primary-400))
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-premium {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--color-primary-300)),
+      hsl(var(--color-primary-100)) 50%,
+      hsl(var(--color-primary-300))
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-gradient-primary {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--color-primary-600)),
+      hsl(var(--color-primary-800))
+    );
+  }
+
+  .bg-gradient-premium {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--color-primary-500)),
+      hsl(var(--color-secondary-500))
+    );
+  }
+
+  /* 🎨 DUOTONE EFFECT — L'effet signature */
+  .duotone-blue {
+    position: relative;
+    overflow: hidden;
+  }
+  .duotone-blue::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--color-primary-950)) 0%,
+      hsl(var(--color-primary-800)) 50%,
+      hsl(var(--color-primary-600)) 100%
+    );
+    mix-blend-mode: color;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .duotone-blue::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--color-primary-950) / 0.4),
+      hsl(var(--color-primary-700) / 0.2)
+    );
+    z-index: 3;
+    pointer-events: none;
+  }
+  .duotone-blue > img,
+  .duotone-blue > video {
+    filter: grayscale(100%) contrast(1.1) brightness(0.9);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Effet grain subtil pour la profondeur */
+  .grain-overlay::before {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    opacity: 0.15;
+    animation: grain 8s steps(10) infinite;
+    pointer-events: none;
+    z-index: 4;
+  }
+
+  /* Bouton premium avec effet shimmer au hover */
+  .btn-shine {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-shine::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.25),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
+  .btn-shine:hover::before {
+    left: 100%;
+  }
+
+  /* Input avec label flottant */
+  .input-float {
+    position: relative;
+  }
+  .input-float input:focus ~ label,
+  .input-float input:not(:placeholder-shown) ~ label {
+    transform: translateY(-1.4rem) scale(0.85);
+    color: hsl(var(--color-primary-600));
+    font-weight: 500;
+  }
+  .input-float label {
+    position: absolute;
+    left: 1rem;
+    top: 0.875rem;
+    transform-origin: left center;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    color: hsl(var(--color-muted-foreground));
+  }
 }

@@ -39,3 +39,28 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+# env
+.env*.local
+.env
+
+# editor
+.vscode
+.idea
+
+# logs
+*.log
+logs/
+
+# supabase
+supabase/.branches
+supabase/.temp
+
+# puppeteer
+.cache/puppeteer
+
+# builds
+.next/
+out/
+dist/
