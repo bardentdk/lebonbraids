@@ -1,4 +1,6 @@
-'use client'; import { useTransition, useState } from 'react';
+'use client'; 
+
+import { useTransition, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -19,7 +21,11 @@ import {
     stockAdjustmentSchema,
     type StockAdjustmentInput,
 } from '@/lib/validators/stock';
-import { adjustStock } from '@/lib/actions/stocks'; interface Props {
+import { adjustStock } from '@/lib/actions/stocks';
+import { z } from 'zod';
+
+type StockAdjustmentFormValues = z.input<typeof stockAdjustmentSchema>;
+interface Props {
     open: boolean;
     onClose: () => void;
     product: {
@@ -63,13 +69,21 @@ import { adjustStock } from '@/lib/actions/stocks'; interface Props {
 ]; export function StockAdjustmentModal({ open, onClose, product }: Props) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
-    const [type, setType] = useState<StockAdjustmentInput['type']>('in'); const {
+    const [type, setType] = useState<StockAdjustmentInput['type']>('in'); 
+    // const {
+    //     register,
+    //     handleSubmit,
+    //     watch,
+    //     reset,
+    //     formState: { errors },
+    // } = useForm<StockAdjustmentInput>({
+    const {
         register,
         handleSubmit,
         watch,
         reset,
         formState: { errors },
-    } = useForm<StockAdjustmentInput>({
+        } = useForm<StockAdjustmentFormValues, unknown, StockAdjustmentInput>({
         resolver: zodResolver(stockAdjustmentSchema),
         defaultValues: {
             product_id: product?.id || '',
@@ -80,7 +94,8 @@ import { adjustStock } from '@/lib/actions/stocks'; interface Props {
         values: product
             ? { product_id: product.id, type, quantity: 1, reason: '' }
             : undefined,
-    }); const quantity = Number(watch('quantity') || 0);
+    }); 
+    const quantity = Number(watch('quantity') || 0);
     let preview = product?.stock_quantity || 0;
     if (product) {
         if (type === 'in') preview = product.stock_quantity + Math.abs(quantity);
@@ -90,107 +105,113 @@ import { adjustStock } from '@/lib/actions/stocks'; interface Props {
     } const onSubmit = (data: StockAdjustmentInput) => {
         startTransition(async () => {
             const res = await adjustStock({ ...data, type });
-            if (!res.success) return toast.error(res.error || 'Erreur');
+            // if (!res.success) return toast.error(res.error || 'Erreur');
+            if (!res.success) {
+                toast.error(res.error || 'Erreur');
+                return;
+            }
             toast.success('Stock ajusté');
             reset();
             onClose();
             router.refresh();
         });
-    }; if (!product) return null; return (
-    <Modal
-        open={open}
-        onClose={onClose}
-        title={`Ajuster le stock — ${product.name}`}
-        size="md"
-        footer={
-            <>
-            <Button variant="outline" onClick={onClose} disabled={isPending}>
-                Annuler
-            </Button>
-            <Button onClick={handleSubmit(onSubmit)} loading={isPending}>
-                Confirmer
-            </Button>
-            </>
-        }
+    }; 
+    if (!product) return null; return (
+        <Modal
+            open={open}
+            onClose={onClose}
+            title={`Ajuster le stock — ${product.name}`}
+            size="md"
+            footer={
+                <>
+                <Button variant="outline" onClick={onClose} disabled={isPending}>
+                    Annuler
+                </Button>
+                <Button onClick={handleSubmit(onSubmit)} loading={isPending}>
+                    Confirmer
+                </Button>
+                </>
+            }
         >
-    <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
-        {/* Type d'opération */}
-        <div>
-            <label className="mb-2 block text-sm font-medium">Type d'opération</label>
-            <div className="grid grid-cols-2 gap-2">
-                {TYPES.map((t) => {
-                    const Icon = t.icon;
-                    const active = type === t.value;
-                    return (
-                        <button
-                            key={t.value}
-                            type="button"
-                            onClick={() => setType(t.value)}
-                            className={cn(
-                                'flex items-start gap-3 rounded-xl border p-3 text-left transition-all',
-                                t.className,
-                                active && t.activeClass
-                            )}
-                        >
-                            <Icon className="h-4 w-4 flex-shrink-0" />
-                            <div className="min-w-0 flex-1">
-                                <div className="text-sm font-semibold">{t.label}</div>
-                                <div className="text-[11px] opacity-80">{t.description}</div>
-                            </div>
-                        </button>
-                    );
-                })}
-            </div>
-        </div>
-        <Input
-            type="number"
-            label={
-                type === 'adjustment'
-                    ? 'Nouveau stock total'
-                    : 'Quantité'
-            }
-            hint={
-                type === 'adjustment'
-                    ? "La quantité fournie remplacera le stock actuel"
-                    : undefined
-            }
-            {...register('quantity')}
-            error={errors.quantity?.message}
-        />
-        {/* Preview */}
-        <div className="flex items-center gap-3 rounded-xl border border-border bg-muted/40 p-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-background text-primary-600">
-                <Package className="h-4 w-4" />
-            </div>
-            <div className="flex-1">
-                <div className="text-xs uppercase tracking-wider text-muted-foreground">
-                    Stock après opération
+            <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+                {/* Type d'opération */}
+                <div>
+                    <label className="mb-2 block text-sm font-medium">Type d'opération</label>
+                    <div className="grid grid-cols-2 gap-2">
+                        {TYPES.map((t) => {
+                            const Icon = t.icon;
+                            const active = type === t.value;
+                            return (
+                                <button
+                                    key={t.value}
+                                    type="button"
+                                    onClick={() => setType(t.value)}
+                                    className={cn(
+                                        'flex items-start gap-3 rounded-xl border p-3 text-left transition-all',
+                                        t.className,
+                                        active && t.activeClass
+                                    )}
+                                >
+                                    <Icon className="h-4 w-4 flex-shrink-0" />
+                                    <div className="min-w-0 flex-1">
+                                        <div className="text-sm font-semibold">{t.label}</div>
+                                        <div className="text-[11px] opacity-80">{t.description}</div>
+                                    </div>
+                                </button>
+                            );
+                        })}
+                    </div>
                 </div>
-                <div className="mt-1 flex items-center gap-2 text-base font-semibold tabular-nums">
-                    <span className="text-muted-foreground">{product.stock_quantity}</span>
-                    <ArrowRight className="h-4 w-4 text-muted-foreground" />
-                    <span
-                        className={cn(
-                            preview < 0
-                                ? 'text-danger'
-                                : preview === 0
-                                    ? 'text-warning'
-                                    : 'text-success'
-                        )}
-                    >
-                        {preview}
-                    </span>
+                <Input
+                    type="number"
+                    label={
+                        type === 'adjustment'
+                            ? 'Nouveau stock total'
+                            : 'Quantité'
+                    }
+                    hint={
+                        type === 'adjustment'
+                            ? "La quantité fournie remplacera le stock actuel"
+                            : undefined
+                    }
+                    // {...register('quantity')}
+                    {...register('quantity', { valueAsNumber: true })}
+                    error={errors.quantity?.message}
+                />
+                {/* Preview */}
+                <div className="flex items-center gap-3 rounded-xl border border-border bg-muted/40 p-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-background text-primary-600">
+                        <Package className="h-4 w-4" />
+                    </div>
+                    <div className="flex-1">
+                        <div className="text-xs uppercase tracking-wider text-muted-foreground">
+                            Stock après opération
+                        </div>
+                        <div className="mt-1 flex items-center gap-2 text-base font-semibold tabular-nums">
+                            <span className="text-muted-foreground">{product.stock_quantity}</span>
+                            <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                            <span
+                                className={cn(
+                                    preview < 0
+                                        ? 'text-danger'
+                                        : preview === 0
+                                            ? 'text-warning'
+                                            : 'text-success'
+                                )}
+                            >
+                                {preview}
+                            </span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <Textarea
-            label="Raison"
-            rows={2}
-            placeholder="Ex: Réception fournisseur, vente boutique..."
-            {...register('reason')}
-            error={errors.reason?.message}
-        />
-    </form>
-</Modal >
+                <Textarea
+                    label="Raison"
+                    rows={2}
+                    placeholder="Ex: Réception fournisseur, vente boutique..."
+                    {...register('reason')}
+                    error={errors.reason?.message}
+                />
+            </form>
+        </Modal >
     );
 }

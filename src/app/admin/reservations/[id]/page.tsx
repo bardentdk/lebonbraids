@@ -49,6 +49,7 @@ export default async function EditBookingPage({
             status: booking.status,
             payment_status: booking.payment_status,
             discount_amount: Number(booking.discount_amount || 0),
+            deposit_required: Number(booking.deposit_required ?? 0),
             deposit_paid: Number(booking.deposit_paid || 0),
             notes: booking.notes || '',
             internal_notes: booking.internal_notes || '',
