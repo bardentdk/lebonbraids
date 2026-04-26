@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Save } from 'lucide-react';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -29,13 +30,15 @@ export function ProductForm({ initialData, categories }: ProductFormProps) {
     initialData?.cover_image_url || null
   );
 
+  type ProductFormValues = z.input<typeof productSchema>;
   const {
     register,
     handleSubmit,
     setValue,
     watch,
     formState: { errors },
-  } = useForm<ProductInput>({
+  // } = useForm<ProductInput>({
+    } = useForm<ProductFormValues, unknown, ProductInput>({
     resolver: zodResolver(productSchema),
     defaultValues: {
       id: initialData?.id,
@@ -127,7 +130,7 @@ export function ProductForm({ initialData, categories }: ProductFormProps) {
               type="number"
               step="0.01"
               label="Prix de vente (€)"
-              {...register('price')}
+              {...register('price', { valueAsNumber: true })}
               error={errors.price?.message}
             />
             <Input
@@ -135,14 +138,14 @@ export function ProductForm({ initialData, categories }: ProductFormProps) {
               step="0.01"
               label="Prix barré (€)"
               hint="Optionnel — pour afficher une promo"
-              {...register('compare_at_price')}
+              {...register('compare_at_price', { valueAsNumber: true })}
             />
             <Input
               type="number"
               step="0.01"
               label="Prix d'achat (€)"
               hint="Privé — pour calculer la marge"
-              {...register('cost_price')}
+              {...register('cost_price', { valueAsNumber: true })}
             />
           </CardContent>
         </Card>
@@ -167,13 +170,13 @@ export function ProductForm({ initialData, categories }: ProductFormProps) {
                   <Input
                     type="number"
                     label="Stock actuel"
-                    {...register('stock_quantity')}
+                    {...register('stock_quantity', { valueAsNumber: true })}
                   />
                   <Input
                     type="number"
                     label="Seuil d'alerte"
                     hint="Notification quand stock ≤"
-                    {...register('stock_alert_threshold')}
+                    {...register('stock_alert_threshold', { valueAsNumber: true })}
                   />
                 </div>
                 <Switch
@@ -188,7 +191,7 @@ export function ProductForm({ initialData, categories }: ProductFormProps) {
               type="number"
               label="Poids (g)"
               hint="Pour le calcul des frais de port (futur)"
-              {...register('weight_grams')}
+              {...register('weight_grams', { valueAsNumber: true })}
             />
           </CardContent>
         </Card>
@@ -267,7 +270,7 @@ export function ProductForm({ initialData, categories }: ProductFormProps) {
               type="number"
               label="Ordre d'affichage"
               hint="Petit = en premier"
-              {...register('sort_order')}
+              {...register('sort_order', { valueAsNumber: true })}
             />
           </CardContent>
         </Card>

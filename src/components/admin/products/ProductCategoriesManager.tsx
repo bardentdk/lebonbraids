@@ -103,7 +103,16 @@ export function ProductCategoriesManager({ categories }: { categories: Category[
   <ProductCategoryForm
     open={!!editing}
     onClose={() => setEditing(null)}
-    initialData={editing || undefined}
+    // initialData={editing || undefined}
+    initialData={
+      editing
+        ? {
+            ...editing,
+            description: editing.description ?? undefined,
+            icon: editing.icon ?? undefined,
+          }
+        : undefined
+    }
   />
   <DeleteDialog
     open={!!deletingId}
