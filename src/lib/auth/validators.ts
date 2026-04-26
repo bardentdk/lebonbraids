@@ -35,8 +35,11 @@ export const registerSchema = z
       .regex(/[A-Z]/, 'Au moins une majuscule')
       .regex(/[0-9]/, 'Au moins un chiffre'),
     confirmPassword: z.string(),
+    // acceptTerms: z.literal(true, {
+    //   errorMap: () => ({ message: 'Vous devez accepter les conditions' }),
+    // }),
     acceptTerms: z.literal(true, {
-      errorMap: () => ({ message: 'Vous devez accepter les conditions' }),
+      message: 'Vous devez accepter les conditions',
     }),
     marketingConsent: z.boolean().optional(),
   })
