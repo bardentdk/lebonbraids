@@ -125,7 +125,8 @@ export function generateShades(baseHex: string): ColorShades {
   };
 
   const shades = {} as ColorShades;
-  (Object.keys(lightnessMap) as Array<keyof ColorShades>).forEach((shade) => {
+  // (Object.keys(lightnessMap) as Array<keyof ColorShades>).forEach((shade) => {
+  (Object.keys(lightnessMap) as unknown as Array<keyof ColorShades>).forEach((shade) => {
     shades[shade] = hslString(h, saturationMap[shade], lightnessMap[shade]);
   });
 
