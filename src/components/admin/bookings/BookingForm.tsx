@@ -5,6 +5,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format, addMinutes, parseISO } from 'date-fns';
 import { Mail, Phone, User, Calendar, Clock } from 'lucide-react';
+import { z } from 'zod';
 
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
@@ -52,7 +53,8 @@ export function BookingForm({
     watch,
     setValue,
     formState: { errors },
-  } = useForm<BookingInput>({
+    // } = useForm<BookingInput>({
+  } = useForm<z.input<typeof bookingSchema>, unknown, BookingInput>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
       id: initialData?.id,
@@ -70,6 +72,7 @@ export function BookingForm({
       status: initialData?.status || 'confirmed',
       payment_status: initialData?.payment_status || 'unpaid',
       discount_amount: initialData?.discount_amount ?? 0,
+      deposit_required: initialData?.deposit_required ?? 0,
       deposit_paid: initialData?.deposit_paid ?? 0,
       notes: initialData?.notes || '',
       internal_notes: initialData?.internal_notes || '',
@@ -260,7 +263,7 @@ export function BookingForm({
               <Input
                 type="number"
                 step="0.01"
-                {...register('discount_amount')}
+                {...register('discount_amount', { valueAsNumber: true })}
                 className="!h-9 max-w-[100px] text-right"
               />
             </div>
@@ -322,7 +325,7 @@ export function BookingForm({
         type="number"
         step="0.01"
         label="Acompte versé (€)"
-        {...register('deposit_paid')}
+        {...register('deposit_paid', { valueAsNumber: true })}
       />
 
       {/* Notes */}
