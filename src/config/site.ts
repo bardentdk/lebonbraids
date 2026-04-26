@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: 'Braids Platform',
+  name: 'LEBONBRAIDS',
   shortName: 'Braids',
   description:
     'Prenez rendez-vous pour vos tresses et découvrez notre boutique de produits capillaires premium.',

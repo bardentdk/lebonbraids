@@ -4,6 +4,7 @@ import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -16,6 +17,7 @@ import {
 } from '@/lib/validators/service';
 import { upsertServiceCategory } from '@/lib/actions/service-categories';
 
+type ServiceCategoryFormValues = z.input<typeof serviceCategorySchema>;
 interface CategoryFormProps {
   open: boolean;
   onClose: () => void;
@@ -32,7 +34,8 @@ export function CategoryForm({ open, onClose, initialData }: CategoryFormProps) 
     setValue,
     reset,
     formState: { errors },
-  } = useForm<ServiceCategoryInput>({
+    } = useForm<ServiceCategoryFormValues, unknown, ServiceCategoryInput>({
+  // } = useForm<ServiceCategoryInput>({
     resolver: zodResolver(serviceCategorySchema),
     defaultValues: {
       id: initialData?.id,
@@ -102,7 +105,7 @@ export function CategoryForm({ open, onClose, initialData }: CategoryFormProps) 
             type="number"
             label="Ordre"
             hint="Plus petit = en premier"
-            {...register('sort_order')}
+            {...register('sort_order', { valueAsNumber: true })}
           />
         </div>
         <Switch

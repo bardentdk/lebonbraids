@@ -122,10 +122,24 @@ export function CategoriesManager({ categories }: CategoriesManagerProps) {
       </div>
 
       <CategoryForm open={creating} onClose={() => setCreating(false)} />
-      <CategoryForm
+      {/* <CategoryForm
         open={!!editing}
         onClose={() => setEditing(null)}
         initialData={editing || undefined}
+      /> */}
+      <CategoryForm
+        open={!!editing}
+        onClose={() => setEditing(null)}
+        initialData={
+          editing
+            ? {
+                ...editing,
+                description: editing.description ?? undefined,
+                icon: editing.icon ?? undefined,
+                cover_image_url: editing.cover_image_url ?? undefined,
+              }
+            : undefined
+        }
       />
 
       <DeleteDialog

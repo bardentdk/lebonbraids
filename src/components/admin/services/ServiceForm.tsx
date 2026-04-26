@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Save, Eye, Star } from 'lucide-react';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -17,6 +18,7 @@ import { ImageUpload } from '@/components/admin/shared/ImageUpload';
 import { serviceSchema, type ServiceInput } from '@/lib/validators/service';
 import { upsertService } from '@/lib/actions/services';
 
+type ServiceFormValues = z.input<typeof serviceSchema>;
 interface ServiceFormProps {
   initialData?: Partial<ServiceInput> & { id?: string };
   categories: Array<{ id: string; name: string }>;
@@ -35,7 +37,8 @@ export function ServiceForm({ initialData, categories }: ServiceFormProps) {
     setValue,
     watch,
     formState: { errors },
-  } = useForm<ServiceInput>({
+  // } = useForm<ServiceInput>({
+    } = useForm<ServiceFormValues, unknown, ServiceInput>({
     resolver: zodResolver(serviceSchema),
     defaultValues: {
       id: initialData?.id,
@@ -135,7 +138,7 @@ export function ServiceForm({ initialData, categories }: ServiceFormProps) {
               type="number"
               step="0.01"
               label="Prix (€)"
-              {...register('price')}
+              {...register('price', { valueAsNumber: true })}
               error={errors.price?.message}
             />
             <Input
@@ -143,20 +146,20 @@ export function ServiceForm({ initialData, categories }: ServiceFormProps) {
               step="0.01"
               label="Acompte demandé (€)"
               hint="0 = pas d'acompte"
-              {...register('deposit_amount')}
+              {...register('deposit_amount', { valueAsNumber: true })}
               error={errors.deposit_amount?.message}
             />
             <Input
               type="number"
               label="Durée (minutes)"
-              {...register('duration_minutes')}
+              {...register('duration_minutes', { valueAsNumber: true })}
               error={errors.duration_minutes?.message}
             />
             <Input
               type="number"
               label="Préparation (min)"
               hint="Avant la prestation"
-              {...register('preparation_minutes')}
+              {...register('preparation_minutes', { valueAsNumber: true })}
               error={errors.preparation_minutes?.message}
             />
           </CardContent>
@@ -174,19 +177,19 @@ export function ServiceForm({ initialData, categories }: ServiceFormProps) {
               type="number"
               label="Réservation jusqu'à (jours)"
               hint="Ex: 60 = 2 mois à l'avance"
-              {...register('advance_booking_days')}
+              {...register('advance_booking_days', { valueAsNumber: true })}
             />
             <Input
               type="number"
               label="Délai mini avant RDV (heures)"
               hint="Ex: 24 = 1 jour avant"
-              {...register('min_notice_hours')}
+              {...register('min_notice_hours', { valueAsNumber: true })}
             />
             <Input
               type="number"
               label="Max réservations / jour"
               hint="Vide = illimité"
-              {...register('max_bookings_per_day')}
+              {...register('max_bookings_per_day', { valueAsNumber: true })}
             />
           </CardContent>
         </Card>
@@ -254,7 +257,7 @@ export function ServiceForm({ initialData, categories }: ServiceFormProps) {
               type="number"
               label="Ordre d'affichage"
               hint="Petit = en premier"
-              {...register('sort_order')}
+              {...register('sort_order', { valueAsNumber: true })}
             />
           </CardContent>
         </Card>

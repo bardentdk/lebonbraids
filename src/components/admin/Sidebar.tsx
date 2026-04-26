@@ -78,19 +78,22 @@ export function Sidebar({ shopEnabled }: SidebarProps) {
       >
         <div
           className={cn(
-            'flex h-16 items-center border-b border-border px-4',
-            sidebarCollapsed ? 'justify-center' : 'justify-between'
+            'flex h-30 items-center border-b border-border px-4',
+            sidebarCollapsed ? 'justify-center' : 'justify-center'
           )}
         >
-          <Link href="/admin" className="flex items-center gap-2.5 transition-opacity hover:opacity-80">
-            <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-primary text-white shadow-soft">
+          <Link href="/admin" className="flex text-center items-center gap-2.5 transition-opacity hover:opacity-80">
+            {/* <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-primary text-white shadow-soft">
               <Sparkles className="h-4 w-4" />
             </div>
             {!sidebarCollapsed && (
               <span className="whitespace-nowrap text-sm font-semibold tracking-tight">
                 {siteConfig.name}
               </span>
-            )}
+            )} */}
+            <div className='flex justify-center text-center'>
+              <img src="/assets/img/logo.png" alt="" width={100} />
+            </div>
           </Link>
           <button
             type="button"
